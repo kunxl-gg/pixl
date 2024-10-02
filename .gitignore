@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Directories
+.jukit/
+obj/
+bin/
+
+# Files
+compile_flags.txt
