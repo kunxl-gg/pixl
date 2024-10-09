@@ -1,8 +1,7 @@
 #ifndef PIXL_VERTEX_BUFFER_H
 #define PIXL_VERTEX_BUFFER_H
 
-#include <cstddef>
-#include <glad/glad.h>
+#include "pixl/src/pixl-precomp.hpp"
 
 namespace pixl {
 

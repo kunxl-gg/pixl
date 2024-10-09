@@ -35,6 +35,7 @@
 .jukit/
 obj/
 bin/
+include/
 
 # Files
 compile_flags.txt

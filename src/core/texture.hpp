@@ -1,8 +1,7 @@
 #ifndef PIXL_TEXTURE_H
 #define PIXL_TEXTURE_H
 
-#include <glad/glad.h>
-#include <string>
+#include "pixl/src/pixl-precomp.hpp"
 
 namespace pixl {
 

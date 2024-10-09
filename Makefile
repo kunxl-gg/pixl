@@ -13,9 +13,9 @@ GLAD_OBJ := $(OBJ_DIR)/glad.o
 # Compiler and flags
 CXX := clang++
 CXXFLAGS := -std=c++20 -Wall -Wextra -MMD -MP
-APP_INCLUDES := -I/Users/kunaltiwari/ -I/usr/local/include -I/opt/homebrew/include
+APP_INCLUDES := -I/Users/kunaltiwari/
 APP_FRAMEWORKS := -framework Cocoa -framework OpenGL -framework IOKit
-APP_LINKERS := -L/usr/local/lib/ -lglfw3
+APP_LINKERS := -L/usr/local/lib/ -L/Users/kunaltiwari/pixl/lib/ -lglfw3
 
 # Precompiled header
 PCH := /Users/kunaltiwari/pixl/src/pixl-precomp.hpp
@@ -34,7 +34,7 @@ $(GLAD_OBJ): $(GLAD_FILE)
 $(PCH_GCH): $(PCH)
 	@mkdir -p $(OBJ_DIR)
 	@echo "Precompiling header: $<"
-	@$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
+	@$(CXX) $(CXXFLAGS) -x c++-header $< -o $@ $(APP_INCLUDES)
 
 # Compile source files
 $(OBJ_DIR)/%.o: ./src/%.cpp $(PCH_GCH)

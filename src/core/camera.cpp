@@ -1,6 +1,3 @@
-#include <GLFW/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "pixl/src/core/camera.hpp"
 
 namespace pixl {

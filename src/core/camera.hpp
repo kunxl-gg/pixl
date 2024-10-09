@@ -1,7 +1,7 @@
 #ifndef PIXL_CAMERA_H
 #define PIXL_CAMERA_H
 
-#include <glm/glm.hpp>
+#include "pixl/src/pixl-precomp.hpp"
 
 namespace pixl {
 

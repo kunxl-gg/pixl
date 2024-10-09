@@ -1,7 +1,7 @@
 #ifndef PIXL_VERTEX_ARRAY_H
 #define PIXL_VERTEX_ARRAY_H
 
-#include <glad/glad.h>
+#include "pixl/src/pixl-precomp.hpp"
 
 namespace pixl {
 

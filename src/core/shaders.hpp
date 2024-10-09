@@ -1,11 +1,7 @@
 #ifndef PIXL_SHADERS_H
 #define PIXL_SHADERS_H
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <string>
+#include "pixl/src/pixl-precomp.hpp"
 
 namespace pixl {
 
