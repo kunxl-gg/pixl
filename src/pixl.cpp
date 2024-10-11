@@ -63,7 +63,6 @@ int main() {
     std::cout << "Version:" << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL version:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-
     float surf[] = {
         // positions         // normals          // texture coords
         -0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left

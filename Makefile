@@ -13,7 +13,7 @@ GLAD_OBJ := $(OBJ_DIR)/glad.o
 # Compiler and flags
 CXX := clang++
 CXXFLAGS := -std=c++20 -Wall -Wextra -MMD -MP
-APP_INCLUDES := -I/Users/kunaltiwari/
+APP_INCLUDES := -I/Users/kunaltiwari/ -I/Users/kunaltiwari/pixl/include/
 APP_FRAMEWORKS := -framework Cocoa -framework OpenGL -framework IOKit
 APP_LINKERS := -L/usr/local/lib/ -L/Users/kunaltiwari/pixl/lib/ -lglfw3
 
