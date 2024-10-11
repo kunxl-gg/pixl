@@ -15,7 +15,8 @@ CXX := clang++
 CXXFLAGS := -std=c++20 -Wall -Wextra -MMD -MP
 APP_INCLUDES := -I/Users/kunaltiwari/ -I/Users/kunaltiwari/pixl/include/
 APP_FRAMEWORKS := -framework Cocoa -framework OpenGL -framework IOKit
-APP_LINKERS := -L/usr/local/lib/ -L/Users/kunaltiwari/pixl/lib/ -lglfw3
+APP_LINKERS := -L/Users/kunaltiwari/pixl/lib/ -lglfw3 -lassimp
+APP_RPATH := -Wl,-rpath,/Users/kunaltiwari/pixl/lib/
 
 # Precompiled header
 PCH := /Users/kunaltiwari/pixl/src/pixl-precomp.hpp
@@ -46,7 +47,7 @@ $(OBJ_DIR)/%.o: ./src/%.cpp $(PCH_GCH)
 $(BUILD_DIR)/$(APP_NAME): $(OBJ_FILES) $(GLAD_OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@echo "Linking: $@"
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(APP_INCLUDES) $(APP_FRAMEWORKS) $(APP_LINKERS)
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(APP_INCLUDES) $(APP_FRAMEWORKS) $(APP_LINKERS) $(APP_RPATH)
 
 # Run the application
 run: $(BUILD_DIR)/$(APP_NAME)

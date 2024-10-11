@@ -28,21 +28,21 @@ void Model::loadModel(const std::string &path) {
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene) {
-    for (int i = 0; i < node->mNumMeshes; i++) {
+    for (uint i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        _meshes.push_back(processMesh(mesh, scene));
+        _meshes.push_back(processMesh(mesh));
     }
 
-    for (int i = 0; i < node->mNumChildren; i++) {
+    for (uint i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene);
     }
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
+Mesh Model::processMesh(aiMesh *mesh) {
     std::vector<Vertex> vertices;
     std::vector<int> indices;
 
-    for (int i = 0; i < mesh->mNumVertices; i++) {
+    for (uint i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
         glm::vec3 vector;
 
@@ -56,14 +56,12 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         vector.z = mesh->mNormals[i].z;
         vertex._normal = vector;
 
-
-        vertex._uv = glm::vec2(0.0f, 0.0f);
         vertices.push_back(vertex);
     }
 
-    for (int i = 0; i < mesh->mNumFaces; i++) {
+    for (uint i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
-        for (int j = 0; j < face.mNumIndices; j++) {
+        for (uint j = 0; j < face.mNumIndices; j++) {
             indices.push_back(face.mIndices[j]);
         }
     }

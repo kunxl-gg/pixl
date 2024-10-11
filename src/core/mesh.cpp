@@ -6,35 +6,37 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices) {
     _vertices = vertices;
     _indices = indices;
 
-    _vao = VertexArray();
-    _vbo = VertexBuffer();
-    _ebo = VertexBuffer();
-
     setupMesh();
 }
 
 void Mesh::setupMesh() {
-    _vao.bind();
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
-    _vbo.bind(GL_ARRAY_BUFFER);
-    _vbo.setData(GL_ARRAY_BUFFER, _vertices.data(), _vertices.size() * sizeof(Vertex));
+    glBindVertexArray(VAO);
 
-    _ebo.bind(GL_ELEMENT_ARRAY_BUFFER);
-    _ebo.setData(GL_ELEMENT_ARRAY_BUFFER, _indices.data(), _indices.size() * sizeof(int));
+    // load data into vertex buffers
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
 
-    _vao.setAttrib(0, 3, offsetof(Vertex, _position));
-    _vao.setAttrib(1, 3, offsetof(Vertex, _normal));
-    _vao.setAttrib(2, 2, offsetof(Vertex, _uv));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
 
-    _vbo.unbind(GL_ARRAY_BUFFER);
-    _vao.unbind();
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    // vertex normals
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _normal));
+
+    glBindVertexArray(0);
 }
 
 
 void Mesh::draw(Shader &shader) {
-    _vao.bind();
+    glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
-    _vao.unbind();
+    glBindVertexArray(0);
 }
 
 } // namespace pixl

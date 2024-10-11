@@ -12,13 +12,6 @@ namespace pixl {
 struct Vertex {
     glm::vec3 _position;
     glm::vec3 _normal;
-    glm::vec2 _uv;
-};
-
-struct Texture {
-    unsigned int _id;
-    std::string _type;
-    std::string _path;
 };
 
 class Mesh {
@@ -34,6 +27,10 @@ private:
     VertexBuffer _ebo;
     VertexBuffer _vbo;
     VertexArray _vao;
+
+    GLuint VAO;
+    GLuint VBO;
+    GLuint EBO;
 };
 
 } // namespace pixl

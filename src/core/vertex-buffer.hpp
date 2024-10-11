@@ -10,6 +10,8 @@ public:
     VertexBuffer();
     ~VertexBuffer();
 
+    int getID() { return _VBO; }
+
     void bind(GLenum target);
     void unbind(GLenum target);
 

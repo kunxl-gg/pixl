@@ -1,4 +1,4 @@
-#include "pixl/src/core/vertex-buffer.hpp"
+#include "pixl/src/core/mesh.hpp"
 #include "pixl/src/core/vertex-array.hpp"
 
 namespace pixl {
@@ -19,7 +19,7 @@ void VertexArray::unbind() {
     glBindVertexArray(0);
 }
 
-void VertexArray::setAttrib(int id, int size, int offset) {
+void VertexArray::setAttrib(int id, int size, int offset, int stride) {
     glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(offset * sizeof(float)));
     glEnableVertexAttribArray(id);
 }

@@ -10,10 +10,13 @@ public:
     VertexArray();
     ~VertexArray();
 
+    GLuint getID() { return _VAO; }
+
     void bind();
     void unbind();
 
-    void setAttrib(int id, int size, int offset);
+    void setAttrib(int id, int size, int offset, int stride = 8);
+    void setAttribn(int id, int offset);
 private:
     GLuint _VAO;
 };

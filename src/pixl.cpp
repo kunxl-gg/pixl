@@ -1,3 +1,4 @@
+#include "pixl/src/core/model.hpp"
 #include "pixl/src/pixl-precomp.hpp"
 
 #include "pixl/src/core/shaders.hpp"
@@ -6,15 +7,14 @@
 #include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/core/vertex-buffer.hpp"
 
-glm::vec3 cameraPos = glm::vec3(0.0, 1.0, 1.0);  // Camera position
-glm::vec3 cameraFront = glm::vec3(0.0, -1.0, -1.0);  // Looking down at the origin
-glm::vec3 cameraUp = glm::vec3(0.0, 1.0, 0.0);  // Up direction
+void checkError() {
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error: " << error << std::endl;
+    }
+}
 
-pixl::Camera camera = pixl::Camera(cameraPos, cameraFront, cameraUp);
-
-glm::vec3 lightPos = glm::vec3(0.2f, 0.3f, 0.0f);
-
-void processInput(GLFWwindow *window) {
+void processInput(GLFWwindow *window, pixl::Camera &camera) {
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     } else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -62,6 +62,13 @@ int main() {
     std::cout << "Renderer:" << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Version:" << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL version:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+
+    glm::vec3 cameraPos = glm::vec3(0.0, 1.0, 1.0);  // Camera position
+    glm::vec3 cameraFront = glm::vec3(0.0, -1.0, -1.0);  // Looking down at the origin
+    glm::vec3 cameraUp = glm::vec3(0.0, 1.0, 0.0);  // Up direction
+
+    pixl::Camera camera = pixl::Camera(cameraPos, cameraFront, cameraUp);
+    glm::vec3 lightPos = glm::vec3(0.2f, 0.3f, 0.0f);
 
     float surf[] = {
         // positions         // normals          // texture coords
@@ -183,13 +190,30 @@ int main() {
     pixl::Texture texture = pixl::Texture(std::filesystem::absolute("assets/wood.jpeg"));
     texture.unbind();
 
+    // Model shader
+    std::string vModelShader = std::filesystem::absolute("src/shaders/mvert.glsl");
+    std::string vFragShader = std::filesystem::absolute("src/shaders/mfrag.glsl");
+    pixl::Shader modelShader = pixl::Shader(vModelShader, vFragShader);
+
+    modelShader.use();
+
+    model = glm::mat4(1.0f);
+    model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+    modelShader.setMat4("model", model);
+    modelShader.setMat4("projection", projection);
+
+    pixl::Model ourModel = pixl::Model(std::filesystem::absolute("assets/backpack/backpack.obj"));
+
     glEnable(GL_DEPTH_TEST);
 
     // Rendering loop
     while (!glfwWindowShouldClose(window)) {
         // Process Inputs
         glfwPollEvents();
-        processInput(window);
+        processInput(window, camera);
+
+        checkError();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -214,6 +238,10 @@ int main() {
         lightSourceVArrayBuffer.bind();
         glDrawArrays(GL_TRIANGLES, 0, 54);
         glBindVertexArray(0);
+
+        modelShader.use();
+        modelShader.setMat4("view", view);
+        ourModel.drawModel(modelShader);
 
         // Swap Buffers and PollEvents
         glfwSwapBuffers(window);

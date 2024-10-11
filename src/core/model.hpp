@@ -16,7 +16,7 @@ private:
 
     void loadModel(const std::string &path);
     void processNode(aiNode *node, const aiScene *scene);
-    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    Mesh processMesh(aiMesh *mesh);
 };
 
 } // namespace pixl
