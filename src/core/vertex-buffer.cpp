@@ -18,7 +18,7 @@ void VertexBuffer::unbind(GLenum target) {
     glBindBuffer(target, 0);
 }
 
-void VertexBuffer::setData(GLenum target, const void *data, size_t size) {
+void VertexBuffer::setData(GLenum target, size_t size, const void *data) {
     glBindBuffer(target, _VBO);
     glBufferData(target, size, data, GL_STATIC_DRAW);
 }

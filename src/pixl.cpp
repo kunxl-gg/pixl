@@ -7,6 +7,7 @@
 #include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/core/vertex-buffer.hpp"
 
+djf;adoh
 void checkError() {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
@@ -131,12 +132,12 @@ int main() {
 
     // Generating the Vertex Buffer
     pixl::VertexBuffer vbuffer;
-    vbuffer.setData(GL_ARRAY_BUFFER, surf, sizeof(surf));
+    vbuffer.setData(GL_ARRAY_BUFFER, sizeof(surf), surf);
 
     // Specify the vertex attributes
-    varrayBuffer.setAttrib(0, 3, 0);
-    varrayBuffer.setAttrib(1, 3, 3);
-    varrayBuffer.setAttrib(2, 2, 6);
+    varrayBuffer.setAttrib(0, 3, 8 * sizeof(float), 0);
+    varrayBuffer.setAttrib(1, 3, 8 * sizeof(float), 3 * sizeof(float));
+    varrayBuffer.setAttrib(2, 2, 8 * sizeof(float), 6 * sizeof(float));
 
     // Unbind all the vertex and element buffer objects
     vbuffer.unbind(GL_ARRAY_BUFFER);
@@ -147,11 +148,11 @@ int main() {
     lightSourceVArrayBuffer.bind();
 
     pixl::VertexBuffer lightSourceVBuffer;
-    lightSourceVBuffer.setData(GL_ARRAY_BUFFER, vertices, sizeof(vertices));
+    lightSourceVBuffer.setData(GL_ARRAY_BUFFER, sizeof(vertices), vertices);
 
-    lightSourceVArrayBuffer.setAttrib(0, 3, 0);
-    lightSourceVArrayBuffer.setAttrib(1, 3, 3);
-    lightSourceVArrayBuffer.setAttrib(2, 2, 6);
+    varrayBuffer.setAttrib(0, 3, 8 * sizeof(float), 0);
+    varrayBuffer.setAttrib(1, 3, 8 * sizeof(float), 3 * sizeof(float));
+    varrayBuffer.setAttrib(2, 2, 8 * sizeof(float), 6 * sizeof(float));
 
     // Unbind all the vertex and element buffer objects
     lightSourceVBuffer.unbind(GL_ARRAY_BUFFER);
@@ -187,7 +188,7 @@ int main() {
     lightShader.setMat4("model", model);
     lightShader.setMat4("projection", projection);
 
-    pixl::Texture texture = pixl::Texture(std::filesystem::absolute("assets/wood.jpeg"));
+    pixl::Texture texture = pixl::Texture(std::filesystem::absolute("assets/wood.jpeg"), pixl::kDiffuse);
     texture.unbind();
 
     // Model shader

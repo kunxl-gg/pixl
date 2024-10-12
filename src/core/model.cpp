@@ -30,7 +30,7 @@ void Model::loadModel(const std::string &path) {
 void Model::processNode(aiNode *node, const aiScene *scene) {
     for (uint i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        _meshes.push_back(processMesh(mesh));
+        _meshes.emplace_back(processMesh(mesh, scene));
     }
 
     for (uint i = 0; i < node->mNumChildren; i++) {
@@ -59,6 +59,7 @@ Mesh Model::processMesh(aiMesh *mesh) {
         vertices.push_back(vertex);
     }
 
+    // process indices
     for (uint i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
         for (uint j = 0; j < face.mNumIndices; j++) {

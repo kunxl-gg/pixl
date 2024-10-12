@@ -15,7 +15,7 @@ public:
     void bind(GLenum target);
     void unbind(GLenum target);
 
-    void setData(GLenum target, const void *data, size_t size);
+    void setData(GLenum target, size_t size, const void *data);
 private:
     GLuint _VBO;
 };

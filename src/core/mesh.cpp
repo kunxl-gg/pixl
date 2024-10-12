@@ -2,41 +2,43 @@
 
 namespace pixl {
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture> textures) {
     _vertices = vertices;
     _indices = indices;
+    _textures = textures;
+
+    _vbo = new VertexBuffer();
+    _ebo = new VertexBuffer();
+    _vao = new VertexArray();
 
     setupMesh();
 }
 
 void Mesh::setupMesh() {
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
+    _vao->bind();
 
     // load data into vertex buffers
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
+    _vbo->bind(GL_ARRAY_BUFFER);
+    _vbo->setData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0]);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
+    // load data into element buffers
+    _ebo->bind(GL_ELEMENT_ARRAY_BUFFER);
+    _ebo->setData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(int), &_indices[0]);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // vertex normals
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, _normal));
+    // set the vertex attribute pointers
+    _vao->setAttrib(0, 3, sizeof(Vertex), 0);
+    _vao->setAttrib(1, 3, sizeof(Vertex), offsetof(Vertex, _normal));
 
-    glBindVertexArray(0);
+    // unbind the VBO and VAO
+    _vbo->unbind(GL_ARRAY_BUFFER);
+    _vao->unbind();
 }
 
 
 void Mesh::draw(Shader &shader) {
-    glBindVertexArray(VAO);
+    _vao->bind();
     glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    _vao->unbind();
 }
 
 } // namespace pixl

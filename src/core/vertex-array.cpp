@@ -19,8 +19,8 @@ void VertexArray::unbind() {
     glBindVertexArray(0);
 }
 
-void VertexArray::setAttrib(int id, int size, int offset, int stride) {
-    glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(offset * sizeof(float)));
+void VertexArray::setAttrib(int id, size_t size, size_t stride, size_t offset) {
+    glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, stride, (void*)(offset));
     glEnableVertexAttribArray(id);
 }
 
