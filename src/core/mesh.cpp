@@ -2,7 +2,7 @@
 
 namespace pixl {
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture> textures) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture *> textures) {
     _vertices = vertices;
     _indices = indices;
     _textures = textures;

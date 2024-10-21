@@ -12,7 +12,8 @@ public:
      * @param vShaderPath File path for the vertexShader
      * @param fShaderPath File path for the fragment Shader
      */
-    Shader(std::string &vShaderPath, std::string &fShaderPath);
+    Shader(const std::string &vShaderPath, const std::string &fShaderPath);
+    Shader() = default;
 
     /** Shader Destructor.
      *  Deletes the shader program.

@@ -7,13 +7,14 @@
 #include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/core/vertex-buffer.hpp"
 
-djf;adoh
 void checkError() {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
         std::cerr << "OpenGL Error: " << error << std::endl;
     }
 }
+
+bool blingPhong = false;
 
 void processInput(GLFWwindow *window, pixl::Camera &camera) {
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
@@ -26,6 +27,8 @@ void processInput(GLFWwindow *window, pixl::Camera &camera) {
         camera.processKeyboard(pixl::CameraMovement::kLeft);
     } else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.processKeyboard(pixl::CameraMovement::kRight);
+    } else if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+        blingPhong = !blingPhong;
     }
 }
 
@@ -69,7 +72,7 @@ int main() {
     glm::vec3 cameraUp = glm::vec3(0.0, 1.0, 0.0);  // Up direction
 
     pixl::Camera camera = pixl::Camera(cameraPos, cameraFront, cameraUp);
-    glm::vec3 lightPos = glm::vec3(0.2f, 0.3f, 0.0f);
+    glm::vec3 lightPos = glm::vec3(0.2f, 0.5f, 0.0f);
 
     float surf[] = {
         // positions         // normals          // texture coords
@@ -132,6 +135,7 @@ int main() {
 
     // Generating the Vertex Buffer
     pixl::VertexBuffer vbuffer;
+    vbuffer.bind(GL_ARRAY_BUFFER);
     vbuffer.setData(GL_ARRAY_BUFFER, sizeof(surf), surf);
 
     // Specify the vertex attributes
@@ -165,6 +169,7 @@ int main() {
 
     // Sending uniforms
     glm::mat4 model = glm::mat4(1.0f);
+    model = glm::scale(model, glm::vec3(5.0f, 1.0f, 5.0f));
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
@@ -175,6 +180,7 @@ int main() {
 
     shader.setVec3("lightPos", lightPos);
     shader.setVec3("viewPos", camera.getCameraPos());
+    shader.setBool("blingPhong", blingPhong);
 
     // Compiling the light source shaders
     std::string vLightShader = std::filesystem::absolute("src/shaders/lvert.glsl");
@@ -183,6 +189,7 @@ int main() {
 
     lightShader.use();
 
+    model = glm::mat4(1.0f);
     model = glm::translate(model, lightPos);
     model = glm::scale(model, glm::vec3(0.2f));
     lightShader.setMat4("model", model);
@@ -199,12 +206,11 @@ int main() {
     modelShader.use();
 
     model = glm::mat4(1.0f);
-    model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+    model = glm::translate(model, glm::vec3(-0.2f, 0.2f, 0.0f));
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(2.0f));
     modelShader.setMat4("model", model);
     modelShader.setMat4("projection", projection);
-
-    pixl::Model ourModel = pixl::Model(std::filesystem::absolute("assets/backpack/backpack.obj"));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -224,8 +230,10 @@ int main() {
         texture.bind();
         // Shader to use before we start Rendering
 
+        // Shader to use before we start Rendering
         shader.use();
         shader.setMat4("view", view);
+        shader.setInt("blingPhong", blingPhong);
 
         varrayBuffer.bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -240,9 +248,11 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 54);
         glBindVertexArray(0);
 
+        /*
         modelShader.use();
         modelShader.setMat4("view", view);
         ourModel.drawModel(modelShader);
+         * */
 
         // Swap Buffers and PollEvents
         glfwSwapBuffers(window);

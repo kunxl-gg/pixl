@@ -4,6 +4,7 @@
 #include "pixl/src/pixl-precomp.hpp"
 
 #include "pixl/src/core/shaders.hpp"
+#include "pixl/src/core/texture.hpp"
 #include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/core/vertex-buffer.hpp"
 
@@ -16,21 +17,18 @@ struct Vertex {
 
 class Mesh {
 public:
-    Mesh(std::vector<Vertex> vertices, std::vector<int> indices);
+    Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture *> textrues);
 
     void setupMesh();
     void draw(Shader &shader);
 private:
     std::vector<int> _indices;
     std::vector<Vertex> _vertices;
+    std::vector<Texture *> _textures;
 
-    VertexBuffer _ebo;
-    VertexBuffer _vbo;
-    VertexArray _vao;
-
-    GLuint VAO;
-    GLuint VBO;
-    GLuint EBO;
+    VertexBuffer *_ebo;
+    VertexBuffer *_vbo;
+    VertexArray *_vao;
 };
 
 } // namespace pixl

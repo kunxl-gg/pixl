@@ -85,6 +85,11 @@ void Shader::use() {
     glUseProgram(_programID);
 }
 
+void Shader::setInt(const std::string &uniformName, int value) const {
+    GLint id = glGetUniformLocation(_programID, uniformName.c_str());
+    glUniform1i(id, value);
+}
+
 void Shader::setBool(const std::string &uniformName, bool value) const {
     GLint id = glGetUniformLocation(_programID, uniformName.c_str());
     glUniform1i(id, (int)value);
@@ -101,7 +106,7 @@ void Shader::setVec3(const std::string &uniformName, const glm::vec3 &value) con
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        std::cout << "ERROR::SHADER::SET_VEC3::" << error << uniformName.c_str() << std::endl;
+        std::cout << "ERROR::SHADER::SET_VEC3::" << error << " " << uniformName.c_str() << std::endl;
     }
 }
 

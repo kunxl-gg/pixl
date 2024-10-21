@@ -1,13 +1,68 @@
-#include "pixl/src/core/debug.hpp"
 #include <cstdarg>
 #include <cstdio>
 
-namespace pxil {
+#include "pixl/src/core/debug.hpp"
 
-void writeToConsole(const char *s, va_list args, unsigned int level, unsigned int channel, bool newLine = true) {
-    char *buf;
-    int len = vasprintf(&buf, s, args);
-    printf("%d", len);
+namespace pixl {
+
+void debug(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[DEBUG] %s\n", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
 }
 
-} // namespace pxil
+void debugN(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[DEBUG] %s", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+void info(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[INFO] %s\n", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+void infoN(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[INFO] %s", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+void error(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[ERROR] %s\n", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+void errorN(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[ERROR] %s", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+} // namespace pixl

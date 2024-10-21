@@ -1,6 +1,7 @@
 #include "pixl/src/core/model.hpp"
 #include "pixl/include/glm/ext/vector_float3.hpp"
 #include "pixl/src/core/mesh.hpp"
+#include "pixl/src/core/texture.hpp"
 
 namespace pixl {
 
@@ -16,7 +17,7 @@ void Model::drawModel(Shader &shader) {
 
 void Model::loadModel(const std::string &path) {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
 
     if (!scene || !scene->mRootNode || scene->mFlags && AI_SCENE_FLAGS_INCOMPLETE) {
         std::cout << "Error::Assimp::" << importer.GetErrorString() << std::endl;
@@ -38,10 +39,12 @@ void Model::processNode(aiNode *node, const aiScene *scene) {
     }
 }
 
-Mesh Model::processMesh(aiMesh *mesh) {
+Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<Vertex> vertices;
     std::vector<int> indices;
+    std::vector<Texture *> textures;
 
+    // process vertices
     for (uint i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
         glm::vec3 vector;
@@ -67,8 +70,29 @@ Mesh Model::processMesh(aiMesh *mesh) {
         }
     }
 
-    return Mesh(vertices, indices);
+    // process material
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+    std::vector<Texture *> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::kDiffuse);
+    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    return Mesh(vertices, indices, textures);
+}
 
+std::vector<Texture *> Model::loadMaterialTextures(aiMaterial *material, aiTextureType type, TextureType typeName) {
+    std::vector<Texture *> textures;
+    for (uint i = 0; i < material->GetTextureCount(type); i++) {
+        aiString str;
+        material->GetTexture(type, i, &str);
+
+        const char *path = str.C_Str();
+        char directory[100] = "assets/backpack/";
+        strcat(directory, path);
+        const std::string filePath = directory;
+        printf("Texture Path: %s\n", filePath.c_str());
+
+        Texture *tex =  new Texture(filePath, typeName);
+        textures.push_back(tex);
+    }
+    return textures;
 }
 
 } // namespace pixl

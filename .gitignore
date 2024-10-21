@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+assets/
+assets/vertices/
+
 # Compiled Object files
 *.slo
 *.lo

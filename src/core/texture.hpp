@@ -5,16 +5,23 @@
 
 namespace pixl {
 
+enum TextureType {
+    kAmbient,
+    kDiffuse,
+    kSpecular,
+};
+
 class Texture {
 public:
-    Texture(const std::string &path);
+    Texture(const std::string &path, TextureType type);
 
     void bind();
     void unbind();
 
-    void loadTexture();
+    void loadTexture(GLenum format = GL_RGB);
 private:
     GLuint _textureID;
+    TextureType _type = kDiffuse;
 
     int _width;
     int _height;

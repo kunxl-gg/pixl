@@ -1,10 +1,10 @@
 #ifndef PIXL_MODEL_HPP
 #define PIXL_MODEL_HPP
 
+#include "pixl/src/core/texture.hpp"
 #include "pixl/src/pixl-precomp.hpp"
 #include "pixl/src/core/mesh.hpp"
 
-#include "pixl/include/assimp/types.h"
 namespace pixl {
 
 class Model {
@@ -16,8 +16,8 @@ private:
 
     void loadModel(const std::string &path);
     void processNode(aiNode *node, const aiScene *scene);
-    Mesh processMesh(aiMesh *mesh);
-};
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    std::vector<Texture *> loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureType typeName); };
 
 } // namespace pixl
 

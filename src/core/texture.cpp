@@ -4,8 +4,9 @@
 
 namespace pixl {
 
-Texture::Texture(const std::string &path) {
+Texture::Texture(const std::string &path, TextureType type) {
     _path = path.c_str();
+    _type = type;
     _textureID = 0;
     _width = 0;
     _height = 0;
@@ -21,7 +22,7 @@ void Texture::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::loadTexture() {
+void Texture::loadTexture(GLenum format) {
     unsigned char *data = stbi_load(_path, &_width, &_height, &_numChannels, 0);
 
     glGenTextures(1, &_textureID);
@@ -34,7 +35,7 @@ void Texture::loadTexture() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         printf("Failed to load Texture!");
