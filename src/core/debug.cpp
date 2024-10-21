@@ -65,4 +65,24 @@ void errorN(const char *s, ...) {
     va_end(args);
 }
 
+void success(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[SUCCESS] %s\n", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
+void successN(const char *s, ...) {
+    char buffer[1024];
+    snprintf(buffer, 1024, "[SUCCESS] %s", s);
+
+    va_list args;
+    va_start(args, s);
+    vprintf(buffer, args);
+    va_end(args);
+}
+
 } // namespace pixl

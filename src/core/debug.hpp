@@ -50,6 +50,19 @@ void error(const char *s, ...);
  * Does not appends a newline.
  */
 void errorN(const char *s, ...);
-}
 
-#endif //
+/**
+ * Print a success message to the console.
+ * Appends a newline.
+ */
+void success(const char *s, ...);
+
+/**
+ * Print a success message to the console.
+ * Does not appends a newline.
+ */
+void successN(const char *s, ...);
+
+} // namespace pixl
+
+#endif // PIXL_DEBUG_HPP

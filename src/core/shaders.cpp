@@ -1,3 +1,5 @@
+#include "pixl/src/core/debug.hpp"
+#include "pixl/src/pixl-precomp.hpp"
 #include "pixl/src/core/shaders.hpp"
 
 #include <string>
@@ -7,7 +9,7 @@
 
 namespace pixl {
 
-Shader::Shader(std::string &vShaderPath, std::string &fShaderPath) {
+Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
     std::string vShaderCode;
     std::string fShaderCode;
 
@@ -35,7 +37,7 @@ Shader::Shader(std::string &vShaderPath, std::string &fShaderPath) {
         fShaderCode = fShaderStream.str();
 
     } catch (std::ifstream::failure error) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        errorN("Failed to read shader file \n");
     }
 
     const char *vShader = vShaderCode.c_str();
@@ -52,7 +54,7 @@ Shader::Shader(std::string &vShaderPath, std::string &fShaderPath) {
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertex, 512, nullptr, infolog);
-        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED %s", infolog);
+        error("Failed to compile Shader %s", infolog);
     }
 
     fragment = glCreateShader(GL_FRAGMENT_SHADER);

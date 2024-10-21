@@ -14,3 +14,9 @@
 #include "pixl/include/glm/glm.hpp"
 #include "pixl/include/glm/gtc/type_ptr.hpp"
 
+#include "pixl/include/imgui/imgui.h"
+#include "pixl/include/imgui/imgui_internal.h"
+#include "pixl/include/imgui/imgui_impl_glfw.h"
+#include "pixl/include/imgui/imgui_impl_opengl3.h"
+
+#include "pixl/src/core/debug.hpp"

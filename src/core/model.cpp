@@ -1,5 +1,7 @@
-#include "pixl/src/core/model.hpp"
 #include "pixl/include/glm/ext/vector_float3.hpp"
+
+#include "pixl/src/core/debug.hpp"
+#include "pixl/src/core/model.hpp"
 #include "pixl/src/core/mesh.hpp"
 #include "pixl/src/core/texture.hpp"
 
@@ -19,10 +21,10 @@ void Model::loadModel(const std::string &path) {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
 
-    if (!scene || !scene->mRootNode || scene->mFlags && AI_SCENE_FLAGS_INCOMPLETE) {
-        std::cout << "Error::Assimp::" << importer.GetErrorString() << std::endl;
+    if (!scene || !scene->mRootNode || (scene->mFlags && AI_SCENE_FLAGS_INCOMPLETE)) {
+        error("Assimp::%s", importer.GetErrorString());
     } else {
-        std::cout << "Success::Assimp::" << std::endl;
+        success("Successfully loaded model: %s", path.c_str());
     }
 
     processNode(scene->mRootNode, scene);
@@ -87,7 +89,6 @@ std::vector<Texture *> Model::loadMaterialTextures(aiMaterial *material, aiTextu
         char directory[100] = "assets/backpack/";
         strcat(directory, path);
         const std::string filePath = directory;
-        printf("Texture Path: %s\n", filePath.c_str());
 
         Texture *tex =  new Texture(filePath, typeName);
         textures.push_back(tex);

@@ -1,3 +1,5 @@
+#include "pixl/src/core/debug.hpp"
+#include "pixl/src/core/frame-buffer.hpp"
 #include "pixl/src/core/model.hpp"
 #include "pixl/src/pixl-precomp.hpp"
 
@@ -6,6 +8,8 @@
 #include "pixl/src/core/texture.hpp"
 #include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/core/vertex-buffer.hpp"
+
+#include "pixl/src/editor/editor.hpp"
 
 void checkError() {
     GLenum error = glGetError();
@@ -62,10 +66,10 @@ int main() {
     }
 
     // Print the OpenGL version
-    std::cout << "Vendor:" << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer:" << glGetString(GL_RENDERER) << std::endl;
-    std::cout << "Version:" << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    pixl::debug("OpenGL Version: %s", glGetString(GL_VERSION));
+    pixl::debug("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    pixl::debug("Renderer: %s", glGetString(GL_RENDERER));
+    pixl::debug("Vendor: %s", glGetString(GL_VENDOR));
 
     glm::vec3 cameraPos = glm::vec3(0.0, 1.0, 1.0);  // Camera position
     glm::vec3 cameraFront = glm::vec3(0.0, -1.0, -1.0);  // Looking down at the origin
