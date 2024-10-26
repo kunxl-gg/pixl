@@ -6,6 +6,7 @@ ROOT_DIR := $(shell pwd)
 
 # Source and header files
 GLAD_FILE := $(ROOT_DIR)/include/glad.c
+IMGUI_FILES := $(ROOT_DIR)/include/imgui/*.cpp
 SRC_FILES := $(wildcard ./src/**/*.cpp ./src/*.cpp)
 OBJ_FILES := $(patsubst ./src/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 GLAD_OBJ := $(OBJ_DIR)/glad.o
@@ -47,7 +48,7 @@ $(OBJ_DIR)/%.o: ./src/%.cpp $(PCH_GCH)
 $(BUILD_DIR)/$(APP_NAME): $(OBJ_FILES) $(GLAD_OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@echo "Linking: $@"
-	@$(CXX) $(CXXFLAGS) $^ -o $@ $(APP_INCLUDES) $(APP_FRAMEWORKS) $(APP_LINKERS) $(APP_RPATH)
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(IMGUI_FILES) $(APP_INCLUDES) $(APP_FRAMEWORKS) $(APP_LINKERS) $(APP_RPATH)
 
 # Run the application
 run: $(BUILD_DIR)/$(APP_NAME)

@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "pixl/src/core/debug.hpp"
+#include "pixl/src/core/debug-console.hpp"
 
 namespace pixl {
 
@@ -13,6 +14,8 @@ void debug(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void debugN(const char *s, ...) {
@@ -23,6 +26,8 @@ void debugN(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void info(const char *s, ...) {
@@ -33,6 +38,8 @@ void info(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void infoN(const char *s, ...) {
@@ -43,6 +50,8 @@ void infoN(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void error(const char *s, ...) {
@@ -53,6 +62,8 @@ void error(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void errorN(const char *s, ...) {
@@ -63,6 +74,8 @@ void errorN(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void success(const char *s, ...) {
@@ -73,6 +86,8 @@ void success(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 void successN(const char *s, ...) {
@@ -83,6 +98,8 @@ void successN(const char *s, ...) {
     va_start(args, s);
     vprintf(buffer, args);
     va_end(args);
+
+    DebugConsole::getInstance().addMessage(buffer);
 }
 
 } // namespace pixl

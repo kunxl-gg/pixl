@@ -35,7 +35,9 @@ void FrameBuffer::attachTexture(GLenum attachment, GLuint textureId) {
 void FrameBuffer::attachRenderBuffer() {
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
-
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, _width, _height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
 }
 
 } // namespace pixl

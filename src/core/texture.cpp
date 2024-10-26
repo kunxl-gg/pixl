@@ -14,6 +14,18 @@ Texture::Texture(const std::string &path, TextureType type) {
     loadTexture();
 }
 
+Texture::Texture(TextureType type, int width, int height) {
+    _path = nullptr;
+    _type = type;
+    _textureID = 0;
+    _width = width,
+    _height = height;
+
+    glGenTextures(1, &_textureID);
+    glBindTexture(GL_TEXTURE_2D, _textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+}
+
 void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, _textureID);
 }
@@ -35,13 +47,17 @@ void Texture::loadTexture(GLenum format) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
-        printf("Failed to load Texture!");
+        error("Failed to load texture: %s", _path);
     }
 
     stbi_image_free(data);
+}
+
+void Texture::clear() {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 }
 
 } // namespace pixl

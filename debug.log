@@ -1,0 +1,9 @@
+Compiling: src/core/debug.cpp
+Linking: bin/pixl
+Running: bin/pixl
+
+[DEBUG] OpenGL Version: 4.1 Metal - 88.1
+[DEBUG] GLSL Version: 4.10
+[DEBUG] Renderer: Apple M1
+[DEBUG] Vendor: Apple
+[INFO] Framebuffer is complete!

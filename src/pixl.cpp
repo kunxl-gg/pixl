@@ -1,3 +1,4 @@
+#include "pixl/src/core/debug-console.hpp"
 #include "pixl/src/core/debug.hpp"
 #include "pixl/src/core/frame-buffer.hpp"
 #include "pixl/src/core/model.hpp"
@@ -43,6 +44,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     // Get the window height and width
     const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -71,21 +73,20 @@ int main() {
     pixl::debug("Renderer: %s", glGetString(GL_RENDERER));
     pixl::debug("Vendor: %s", glGetString(GL_VENDOR));
 
-    glm::vec3 cameraPos = glm::vec3(0.0, 1.0, 1.0);  // Camera position
-    glm::vec3 cameraFront = glm::vec3(0.0, -1.0, -1.0);  // Looking down at the origin
+    glm::vec3 cameraPos = glm::vec3(0.0, 0.5, 1.0);  // Camera position
+    glm::vec3 cameraFront = glm::vec3(0.0, -0.1, -1.0);  // Looking down at the origin
     glm::vec3 cameraUp = glm::vec3(0.0, 1.0, 0.0);  // Up direction
 
     pixl::Camera camera = pixl::Camera(cameraPos, cameraFront, cameraUp);
     glm::vec3 lightPos = glm::vec3(0.2f, 0.5f, 0.0f);
 
     float surf[] = {
-        // positions         // normals          // texture coords
-        -0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
-         0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,  // Bottom-right
-         0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // Top-right
-         0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // Top-right (duplicate for triangle)
-        -0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f,  // Top-left
-        -0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left (duplicate for triangle)
+        -0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f,  0.0f,  // Bottom-left
+         0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f, 100.0f,  0.0f,  // Bottom-right
+         0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 100.0f, 100.0f, // Top-right
+         0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 100.0f, 100.0f, // Top-right (duplicate for triangle)
+        -0.5f, 0.0f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 100.0f,  // Top-left
+        -0.5f, 0.0f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f,  0.0f,  // Bottom-left (duplicate for triangle)
     };
 
     float vertices[] = {
@@ -133,6 +134,17 @@ int main() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f
     };
 
+    // ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
+
     // Generating the Vertex Array Buffer
     pixl::VertexArray varrayBuffer;
     varrayBuffer.bind();
@@ -173,7 +185,7 @@ int main() {
 
     // Sending uniforms
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, glm::vec3(5.0f, 1.0f, 5.0f));
+    model = glm::scale(model, glm::vec3(100.0f, 1.0f, 100.0f));
     glm::mat4 view = camera.getViewMatrix();
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
@@ -199,7 +211,7 @@ int main() {
     lightShader.setMat4("model", model);
     lightShader.setMat4("projection", projection);
 
-    pixl::Texture texture = pixl::Texture(std::filesystem::absolute("assets/wood.jpeg"), pixl::kDiffuse);
+    pixl::Texture texture = pixl::Texture(std::filesystem::absolute("assets/wood-surf.jpeg"), pixl::kDiffuse);
     texture.unbind();
 
     // Model shader
@@ -218,23 +230,70 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
+
+    float screen[] = {
+        -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,  // Bottom-right
+         0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // Top-right
+         0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // Top-right (duplicate for triangle)
+        -0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.0f, 1.0f,  // Top-left
+        -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // Bottom-left (duplicate for triangle)
+    };
+
+    // Screen Buffer
+    pixl::VertexArray sArray;
+    pixl::VertexBuffer sBuffer;
+    sArray.bind();
+
+    sBuffer.bind(GL_ARRAY_BUFFER);
+    sBuffer.setData(GL_ARRAY_BUFFER, sizeof(screen), screen);
+
+    // Specify the vertex attributes
+    sArray.setAttrib(0, 3, 8 * sizeof(float), 0);
+    sArray.setAttrib(1, 3, 8 * sizeof(float), 3 * sizeof(float));
+    sArray.setAttrib(2, 2, 8 * sizeof(float), 6 * sizeof(float));
+
+    // Unbind all the vertex and element buffer objects
+    sBuffer.unbind(GL_ARRAY_BUFFER);
+    sArray.unbind();
+
+    pixl::FrameBuffer frameBuffer = pixl::FrameBuffer();
+    frameBuffer.create(mode->width, mode->height);
+    frameBuffer.bind();
+
+    unsigned int textureColorbuffer;
+    glGenTextures(1, &textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mode->width, mode->height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
+    // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if (!frameBuffer.isComplete()) {
+        pixl::error("Framebuffer is not complete!");
+    } else {
+        pixl::info("Framebuffer is complete!");
+    }
+    frameBuffer.unbind();
+
+    pixl::Shader screenShader = pixl::Shader("src/shaders/svert.glsl", "src/shaders/sfrag.glsl");
+
     // Rendering loop
     while (!glfwWindowShouldClose(window)) {
         // Process Inputs
         glfwPollEvents();
         processInput(window, camera);
 
-        checkError();
+        frameBuffer.bind();
+        glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         view = camera.getViewMatrix();
-
         texture.bind();
-        // Shader to use before we start Rendering
 
-        // Shader to use before we start Rendering
         shader.use();
         shader.setMat4("view", view);
         shader.setInt("blingPhong", blingPhong);
@@ -252,17 +311,31 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 54);
         glBindVertexArray(0);
 
+        frameBuffer.unbind();
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        bool p_open = true;
+        pixl::ShowExampleAppDockSpace(&p_open, textureColorbuffer);
         /*
         modelShader.use();
         modelShader.setMat4("view", view);
         ourModel.drawModel(modelShader);
          * */
 
-        // Swap Buffers and PollEvents
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }
-

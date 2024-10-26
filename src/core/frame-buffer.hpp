@@ -26,7 +26,6 @@ public:
     bool isComplete() const {
         return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
     }
-
 private:
     GLuint _fbo;
     int _width, _height;

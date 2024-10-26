@@ -14,11 +14,15 @@ enum TextureType {
 class Texture {
 public:
     Texture(const std::string &path, TextureType type);
+    Texture(TextureType type, int widht, int height);
 
     void bind();
     void unbind();
 
     void loadTexture(GLenum format = GL_RGB);
+
+    GLuint getTexID() { return _textureID; }
+    void clear();
 private:
     GLuint _textureID;
     TextureType _type = kDiffuse;
