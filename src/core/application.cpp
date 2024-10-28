@@ -16,6 +16,13 @@ void Application::init() {
     _window = new Window(800, 600, "Pixl");
     _window->init();
 
+    // Initialise GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        error("Failed to initialise GLAD");
+        return;
+    }
+
+    // Set the running flag
     _isRunning = true;
 }
 
