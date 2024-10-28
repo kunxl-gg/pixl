@@ -17,7 +17,7 @@ public:
     void beginFrame();
     void endFrame();
 
-    void isRunning();
+    bool isRunning();
 private:
     GLFWwindow *_window;
     int _width, _height;

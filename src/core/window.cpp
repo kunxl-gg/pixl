@@ -40,6 +40,10 @@ void Window::resize(int width, int height) {
     _height = height;
 }
 
+bool Window::isRunning() {
+    return !glfwWindowShouldClose(_window);
+}
+
 void Window::beginFrame() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
