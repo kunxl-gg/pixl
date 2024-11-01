@@ -1,5 +1,5 @@
 #include <cstdarg>
-#include <cstdio>
+#include <ctime>
 
 #include "pixl/src/core/debug.hpp"
 #include "pixl/src/core/debug-console.hpp"
@@ -8,7 +8,10 @@ namespace pixl {
 
 void debug(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[DEBUG] %s\n", s);
+    std::time_t currentTime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%H:%M:%S [DEBUG]", std::localtime(&currentTime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s\n", s);
 
     va_list args;
     va_start(args, s);
@@ -20,7 +23,10 @@ void debug(const char *s, ...) {
 
 void debugN(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[DEBUG] %s", s);
+    std::time_t currentTime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%H:%M:%S [DEBUG]", std::localtime(&currentTime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s", s);
 
     va_list args;
     va_start(args, s);
@@ -32,7 +38,10 @@ void debugN(const char *s, ...) {
 
 void info(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[INFO] %s\n", s);
+    std::time_t currentTime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%H:%M:%S [INFO]", std::localtime(&currentTime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s\n", s);
 
     va_list args;
     va_start(args, s);
@@ -44,7 +53,10 @@ void info(const char *s, ...) {
 
 void infoN(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[INFO] %s", s);
+    std::time_t currentTime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%H:%M:%S [INFO]", std::localtime(&currentTime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s", s);
 
     va_list args;
     va_start(args, s);
@@ -56,7 +68,10 @@ void infoN(const char *s, ...) {
 
 void error(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[ERROR] %s\n", s);
+    std::time_t currenttime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%h:%m:%s [ERROR]", std::localtime(&currenttime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s\n", s);
 
     va_list args;
     va_start(args, s);
@@ -68,7 +83,10 @@ void error(const char *s, ...) {
 
 void errorN(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[ERROR] %s", s);
+    std::time_t currenttime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%h:%m:%s [ERROR]", std::localtime(&currenttime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s", s);
 
     va_list args;
     va_start(args, s);
@@ -80,7 +98,10 @@ void errorN(const char *s, ...) {
 
 void success(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[SUCCESS] %s\n", s);
+    std::time_t currenttime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%h:%m:%s [SUCCESS]", std::localtime(&currenttime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s\n", s);
 
     va_list args;
     va_start(args, s);
@@ -92,7 +113,10 @@ void success(const char *s, ...) {
 
 void successN(const char *s, ...) {
     char buffer[1024];
-    snprintf(buffer, 1024, "[SUCCESS] %s", s);
+    std::time_t currenttime = std::time(nullptr);
+    std::strftime(buffer, sizeof(buffer), "%h:%m:%s [SUCCESS]", std::localtime(&currenttime));
+
+    snprintf(buffer + strlen(buffer), 1024, " %s", s);
 
     va_list args;
     va_start(args, s);
