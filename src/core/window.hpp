@@ -12,12 +12,20 @@ public:
 
     void init();
     void shutdown();
+
+    static void handleResize(GLFWwindow *window, int width, int height);
     void resize(int width, int height);
+    void setViewport(int x, int y, int width, int height) {
+        glViewport(x, y, width, height);
+    }
 
     void beginFrame();
     void endFrame();
 
     bool isRunning();
+    void stopRunning();
+
+    GLFWwindow *getWindow() { return _window; }
 private:
     GLFWwindow *_window;
     int _width, _height;

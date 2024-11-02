@@ -29,19 +29,34 @@ void Window::init() {
 
     _window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
     glfwMakeContextCurrent(_window);
+
+    info("Created window: %s (%d x %d)", _title, _width, _height);
+    glfwSetFramebufferSizeCallback(_window, handleResize);
 }
 
 void Window::shutdown() {
     glfwDestroyWindow(_window);
 }
 
+void Window::handleResize(GLFWwindow *window, int width, int height) {
+    info("Resized Viewport: (%d x %d)", width, height);
+    glViewport(0, 0, width, height);
+}
+
 void Window::resize(int width, int height) {
     _width = width;
     _height = height;
+
+    info("Resized window: %s (%d x %d)", _title, _width, _height);
+    glViewport(0, 0, _width, _height);
 }
 
 bool Window::isRunning() {
     return !glfwWindowShouldClose(_window);
+}
+
+void Window::stopRunning() {
+    glfwSetWindowShouldClose(_window, true);
 }
 
 void Window::beginFrame() {
