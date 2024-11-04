@@ -1,10 +1,12 @@
 #ifndef PIXL_RENDER_HPP
 #define PIXL_RENDER_HPP
 
-#include "pixl/src/core/shaders.hpp"
-#include "pixl/src/core/vertex-buffer.hpp"
-#include "pixl/src/core/vertex-array.hpp"
 #include "pixl/src/pixl-precomp.hpp"
+
+#include "pixl/src/core/shaders.hpp"
+
+#include "pixl/src/rhi/vertex-buffer.hpp"
+#include "pixl/src/rhi/vertex-array.hpp"
 
 namespace pixl {
 

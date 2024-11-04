@@ -1,5 +1,5 @@
 #include "pixl/src/core/mesh.hpp"
-#include "pixl/src/core/vertex-array.hpp"
+#include "pixl/src/rhi/vertex-array.hpp"
 
 namespace pixl {
 

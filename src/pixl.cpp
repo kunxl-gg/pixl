@@ -1,8 +1,8 @@
 #include "pixl/src/pixl-precomp.hpp"
-#include "pixl/src/core/application.hpp"
+#include "pixl/src/core/engine.hpp"
 
 int main() {
-    pixl::Application app;
+    pixl::Engine app;
     app.run();
 
     return 0;

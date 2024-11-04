@@ -5,8 +5,9 @@
 
 #include "pixl/src/core/shaders.hpp"
 #include "pixl/src/core/texture.hpp"
-#include "pixl/src/core/vertex-array.hpp"
-#include "pixl/src/core/vertex-buffer.hpp"
+
+#include "pixl/src/rhi/vertex-array.hpp"
+#include "pixl/src/rhi/vertex-buffer.hpp"
 
 namespace pixl {
 

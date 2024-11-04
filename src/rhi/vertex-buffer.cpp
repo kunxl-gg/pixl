@@ -1,4 +1,4 @@
-#include "pixl/src/core/vertex-buffer.hpp"
+#include "pixl/src/rhi/vertex-buffer.hpp"
 
 namespace pixl {
 
