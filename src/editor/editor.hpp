@@ -2,7 +2,7 @@
 #define PIXL_EDITOR_H
 
 #include "pixl/src/core/debug-console.hpp"
-#include "pixl/src/core/frame-buffer.hpp"
+#include "pixl/src/rhi/frame-buffer.hpp"
 #include "pixl/src/pixl-precomp.hpp"
 #include <cstdio>
 

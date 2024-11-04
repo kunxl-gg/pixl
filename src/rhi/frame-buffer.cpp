@@ -1,4 +1,4 @@
-#include "pixl/src/core/frame-buffer.hpp"
+#include "pixl/src/rhi/frame-buffer.hpp"
 
 namespace pixl {
 
