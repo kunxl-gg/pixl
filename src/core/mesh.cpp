@@ -2,10 +2,9 @@
 
 namespace pixl {
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture *> textures) {
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<int> indices) {
     _vertices = vertices;
     _indices = indices;
-    _textures = textures;
 
     _vbo = new VertexBuffer();
     _ebo = new VertexBuffer();
@@ -35,7 +34,7 @@ void Mesh::setupMesh() {
 }
 
 
-void Mesh::draw(Shader &shader) {
+void Mesh::draw() {
     _vao->bind();
     glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
     _vao->unbind();

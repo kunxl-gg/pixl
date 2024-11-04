@@ -10,7 +10,7 @@ namespace pixl {
 class Model {
 public:
     Model(const std::string &path);
-    void drawModel(Shader &shader);
+    void drawModel();
 private:
     std::vector<Mesh> _meshes;
 

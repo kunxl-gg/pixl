@@ -18,20 +18,18 @@ struct Material {
 };
 
 // Input Variables
-in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
 
 // Uniform Variables
-uniform sampler2D texture1;
-uniform vec3 lightPos;
-uniform vec3 viewPos;
-uniform bool blingPhong;
+vec3 lightPos = vec3(1.2f, 1.0f, 2.0f)
+vec3 viewPos = vec3(0.0f, 0.0f, 0.0f);
+bool blingPhong = true;
 
 // Output Variables
 out vec4 FragColor;
 
-vec3 objectColor = texture(texture1, TexCoords).rgb;
+vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
 vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
 
 void main() {

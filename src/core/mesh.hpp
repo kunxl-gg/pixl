@@ -18,10 +18,10 @@ struct Vertex {
 
 class Mesh {
 public:
-    Mesh(std::vector<Vertex> vertices, std::vector<int> indices, std::vector<Texture *> textrues);
+    Mesh(std::vector<Vertex> vertices, std::vector<int> indices);
 
     void setupMesh();
-    void draw(Shader &shader);
+    void draw();
 private:
     std::vector<int> _indices;
     std::vector<Vertex> _vertices;

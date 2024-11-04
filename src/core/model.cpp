@@ -11,9 +11,9 @@ Model::Model(const std::string &path) {
     loadModel(path);
 }
 
-void Model::drawModel(Shader &shader) {
+void Model::drawModel() {
     for (auto &mesh: _meshes) {
-        mesh.draw(shader);
+        mesh.draw();
     }
 }
 
@@ -33,7 +33,7 @@ void Model::loadModel(const std::string &path) {
 void Model::processNode(aiNode *node, const aiScene *scene) {
     for (uint i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        _meshes.emplace_back(processMesh(mesh, scene));
+        _meshes.push_back(processMesh(mesh, scene));
     }
 
     for (uint i = 0; i < node->mNumChildren; i++) {
@@ -44,7 +44,6 @@ void Model::processNode(aiNode *node, const aiScene *scene) {
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     std::vector<Vertex> vertices;
     std::vector<int> indices;
-    std::vector<Texture *> textures;
 
     // process vertices
     for (uint i = 0; i < mesh->mNumVertices; i++) {
@@ -73,10 +72,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     }
 
     // process material
-    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-    std::vector<Texture *> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::kDiffuse);
-    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices);
 }
 
 std::vector<Texture *> Model::loadMaterialTextures(aiMaterial *material, aiTextureType type, TextureType typeName) {

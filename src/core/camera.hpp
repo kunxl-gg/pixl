@@ -14,6 +14,7 @@ enum CameraMovement {
 
 class Camera {
 public:
+    Camera() = default;
     Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 
     glm::mat4 getViewMatrix();
