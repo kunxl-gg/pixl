@@ -15,8 +15,7 @@ public:
     void bind();
     void unbind();
 
-    void setAttrib(int id, size_t size, size_t stride, size_t offset);;
-    void setAttribn(int id, int offset);
+    void setAttrib(int id, size_t size, size_t stride, size_t offset);
 private:
     GLuint _VAO;
 };
