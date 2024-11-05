@@ -25,7 +25,7 @@ private:
 
     Scene _scene;
     Camera _camera;
-    Renderer _renderer;
+    Renderer *_renderer;
 };
 
 extern Engine app;

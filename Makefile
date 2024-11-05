@@ -7,7 +7,7 @@ ROOT_DIR := $(shell pwd)
 # Source and header files
 GLAD_FILE := $(ROOT_DIR)/include/glad.c
 IMGUI_FILES := $(ROOT_DIR)/include/imgui/*.cpp
-SRC_FILES := $(wildcard ./src/**/*.cpp ./src/*.cpp)
+SRC_FILES := $(wildcard ./src/**/*.cpp ./src/*.cpp ./src/**/**/*.cpp)
 OBJ_FILES := $(patsubst ./src/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 GLAD_OBJ := $(OBJ_DIR)/glad.o
 

@@ -11,8 +11,9 @@ class Model {
 public:
     Model(const std::string &path);
     void drawModel();
-private:
+
     std::vector<Mesh> _meshes;
+private:
 
     void loadModel(const std::string &path);
     void processNode(aiNode *node, const aiScene *scene);

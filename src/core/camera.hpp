@@ -18,10 +18,9 @@ public:
     Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 
     glm::mat4 getViewMatrix();
-    void processKeyboard(CameraMovement movement);
-
     glm::vec3 getCameraPos() { return _cameraPos; }
 
+    void processKeyboard(CameraMovement movement);
 private:
     glm::vec3 _cameraPos;
     glm::vec3 _cameraFront;

@@ -14,9 +14,9 @@ glm::mat4 Camera::getViewMatrix() {
 
 void Camera::processKeyboard(CameraMovement direction) {
     if (direction == CameraMovement::kForward) {
-        _cameraPos += glm::vec3(0, 0, -1) * 0.05f;
+        _cameraPos += _cameraFront * 0.05f;
     } else if (direction == CameraMovement::kBackward) {
-        _cameraPos -= glm::vec3(0, 0, -1) * 0.05f;
+        _cameraPos -= _cameraFront * 0.05f;
     } else if (direction == CameraMovement::kLeft) {
         _cameraPos -= glm::normalize(glm::cross(_cameraFront, _cameraUp)) * 0.05f;
     } else if (direction == CameraMovement::kRight) {

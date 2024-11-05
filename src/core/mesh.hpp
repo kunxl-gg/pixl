@@ -22,9 +22,10 @@ public:
 
     void setupMesh();
     void draw();
+
+    std::vector<Vertex> _vertices;
 private:
     std::vector<int> _indices;
-    std::vector<Vertex> _vertices;
     std::vector<Texture *> _textures;
 
     VertexBuffer *_ebo;

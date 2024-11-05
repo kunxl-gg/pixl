@@ -7,7 +7,12 @@ namespace pixl {
 Engine::Engine() {
     _window = nullptr;
     _isRunning = false;
-    _camera = Camera();
+
+    // Initialise the camera
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    _camera = Camera(cameraPos, cameraFront, cameraUp);
 }
 
 Engine::~Engine() {
@@ -43,7 +48,7 @@ void Engine::init() {
     _camera = Camera(cameraPos, cameraFront, cameraUp);
 
     // Initialise the renderer
-    _renderer = Renderer();
+    _renderer = new Renderer();
 
     // Setup the scene
     setupScene();
@@ -62,9 +67,17 @@ void Engine::run() {
 
         if (Input::isKeyPressed(GLFW_KEY_X)) {
             _window->stopRunning();
+        } else if (Input::isKeyPressed(GLFW_KEY_W)) {
+            _camera.processKeyboard(CameraMovement::kForward);
+        } else if (Input::isKeyPressed(GLFW_KEY_S)) {
+            _camera.processKeyboard(CameraMovement::kBackward);
+        } else if (Input::isKeyPressed(GLFW_KEY_A)) {
+            _camera.processKeyboard(CameraMovement::kLeft);
+        } else if (Input::isKeyPressed(GLFW_KEY_D)) {
+            _camera.processKeyboard(CameraMovement::kRight);
         }
 
-        _renderer.render(_scene);
+        _renderer->render(_scene);
 
         _isRunning = _window->isRunning();
 
@@ -77,16 +90,8 @@ void Engine::run() {
 void Engine::setupScene() {
      _scene = Scene();
 
-    Model bunny("/Users/kunaltiwari/pixl/assets/stanford-bunny.obj");
-    _scene.addModel(&bunny);
-
-    _scene.setShader("/Users/kunaltiwari/pixl/src/shaders/vert.glsl", "/Users/kunaltiwari/pixl/src/shaders/frag.glsl");
-    _scene.activateShader();
-    _scene.setModelMatrix(glm::mat4(1.0f));
-    _scene.setViewMatrix(_camera.getViewMatrix());
-    _scene.setProjectionMatrix(glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f));
-
-    _scene.deactivateShader();
+    Model *bunny = new Model(std::filesystem::absolute("assets/teapot.obj"));
+    _scene.addModel(bunny);
 }
 
 } // namespace pixl

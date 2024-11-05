@@ -10,6 +10,9 @@
 namespace pixl {
 
 Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
+    debug("Reading Shader %s", vShaderPath.c_str());
+    debug("Reading Shader %s", fShaderPath.c_str());
+
     std::string vShaderCode;
     std::string fShaderCode;
 
@@ -36,8 +39,11 @@ Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
         vShaderCode = vShaderStream.str();
         fShaderCode = fShaderStream.str();
 
+        successN("Read Shader %s\n", vShaderPath.c_str());
+        successN("Read Shader %s\n", fShaderPath.c_str());
+
     } catch (std::ifstream::failure error) {
-        errorN("Failed to read shader file \n");
+        errorN("Failed to read shader file %s\n", error.what());
     }
 
     const char *vShader = vShaderCode.c_str();
@@ -51,23 +57,24 @@ Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
     glShaderSource(vertex, 1, &vShader, NULL);
     glCompileShader(vertex);
 
+    glGetShaderInfoLog(vertex, 512, nullptr, infolog);
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(vertex, 512, nullptr, infolog);
-        error("Failed to compile Shader %s", infolog);
+        errorN("Failed to compile Shader %s\n", infolog);
+    } else {
+        successN("Compiled Shader %s\n", vShaderPath.c_str());
     }
 
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShader, NULL);
     glCompileShader(fragment);
 
-    int fSuccess;
-    char finfolog[512];
-
-    glGetShaderiv(fragment, GL_COMPILE_STATUS, &fSuccess);
+    glGetShaderInfoLog(fragment, 512, nullptr, infolog);
+    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(fragment, 512, nullptr, finfolog);
-        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED %s", infolog);
+        errorN("Failed to Compile Shader %s\n", infolog);
+    } else {
+        successN("Compiled Shader %s\n", fShaderPath.c_str());
     }
 
     _programID = glCreateProgram();
