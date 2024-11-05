@@ -41,5 +41,5 @@ bin/
 include/
 
 # Files
-./imgui.ini
+imgui.ini
 compile_flags.txt
