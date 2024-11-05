@@ -11,14 +11,14 @@ class Model {
 public:
     Model(const std::string &path);
     void drawModel();
-
-    std::vector<Mesh> _meshes;
 private:
+    std::vector<Mesh> _meshes;
 
     void loadModel(const std::string &path);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture *> loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureType typeName); };
+
 
 } // namespace pixl
 

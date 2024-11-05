@@ -7,12 +7,6 @@ namespace pixl {
 Engine::Engine() {
     _window = nullptr;
     _isRunning = false;
-
-    // Initialise the camera
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    _camera = Camera(cameraPos, cameraFront, cameraUp);
 }
 
 Engine::~Engine() {
@@ -20,6 +14,8 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
+    debug("Initialising Pixl");
+
     // Initialise the window
     _window = new Window(800, 600, "Pixl");
     _window->init();
@@ -41,12 +37,6 @@ void Engine::init() {
     // Set the running flag
     _isRunning = true;
 
-    // Initialise the camera
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    _camera = Camera(cameraPos, cameraFront, cameraUp);
-
     // Initialise the renderer
     _renderer = new Renderer();
 
@@ -56,6 +46,8 @@ void Engine::init() {
 
 void Engine::shutdown() {
     delete _window;
+    delete _renderer;
+    delete _scene;
     _window = nullptr;
 }
 
@@ -67,14 +59,6 @@ void Engine::run() {
 
         if (Input::isKeyPressed(GLFW_KEY_X)) {
             _window->stopRunning();
-        } else if (Input::isKeyPressed(GLFW_KEY_W)) {
-            _camera.processKeyboard(CameraMovement::kForward);
-        } else if (Input::isKeyPressed(GLFW_KEY_S)) {
-            _camera.processKeyboard(CameraMovement::kBackward);
-        } else if (Input::isKeyPressed(GLFW_KEY_A)) {
-            _camera.processKeyboard(CameraMovement::kLeft);
-        } else if (Input::isKeyPressed(GLFW_KEY_D)) {
-            _camera.processKeyboard(CameraMovement::kRight);
         }
 
         _renderer->render(_scene);
@@ -88,10 +72,10 @@ void Engine::run() {
 }
 
 void Engine::setupScene() {
-     _scene = Scene();
+     _scene = new Scene();
 
     Model *bunny = new Model(std::filesystem::absolute("assets/teapot.obj"));
-    _scene.addModel(bunny);
+    _scene->addModel(bunny);
 }
 
 } // namespace pixl

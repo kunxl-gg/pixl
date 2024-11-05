@@ -20,12 +20,11 @@ public:
 
     void setupScene();
 private:
-    Window *_window;
     bool _isRunning;
 
-    Scene _scene;
-    Camera _camera;
-    Renderer *_renderer;
+    Scene *_scene = nullptr;
+    Window *_window = nullptr;
+    Renderer *_renderer = nullptr;
 };
 
 extern Engine app;

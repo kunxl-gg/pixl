@@ -10,9 +10,6 @@
 namespace pixl {
 
 Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
-    debug("Reading Shader %s", vShaderPath.c_str());
-    debug("Reading Shader %s", fShaderPath.c_str());
-
     std::string vShaderCode;
     std::string fShaderCode;
 
@@ -82,11 +79,21 @@ Shader::Shader(const std::string &vShaderPath, const std::string &fShaderPath) {
     glAttachShader(_programID, fragment);
     glLinkProgram(_programID);
 
+    GLint programSuccess;
+    glGetProgramiv(_programID, GL_LINK_STATUS, &programSuccess);
+    if (!programSuccess) {
+        glGetProgramInfoLog(_programID, 512, nullptr, infolog);
+        errorN("Failed to link program %s\n", infolog);
+    } else {
+        successN("Linked Program %d\n", _programID);
+    }
+
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
 
 Shader::~Shader() {
+    debug("Deleting Shader %d", _programID);
     glDeleteProgram(_programID);
 }
 
@@ -97,16 +104,41 @@ void Shader::use() {
 void Shader::setInt(const std::string &uniformName, int value) const {
     GLint id = glGetUniformLocation(_programID, uniformName.c_str());
     glUniform1i(id, value);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+
+        errorN("ERROR::SHADER::SET_INT::%d %s\n", error, uniformName.c_str());
+    }
 }
 
 void Shader::setBool(const std::string &uniformName, bool value) const {
     GLint id = glGetUniformLocation(_programID, uniformName.c_str());
     glUniform1i(id, (int)value);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        errorN("ERROR::SHADER::SET_BOOL::%d %s\n", error, uniformName.c_str());
+    }
 }
 
 void Shader::setMat4(const std::string &uniformName, const glm::mat4 &value) const {
+    debug("Setting Mat4 for program %d", _programID);
+    glUseProgram(_programID);
+
+    GLint currentProgram;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+    if (currentProgram != _programID) {
+        errorN("Failed to activate shader program: expected %d, got %d\n", _programID, currentProgram);
+    }
+
     GLint id = glGetUniformLocation(_programID, uniformName.c_str());
     glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(value));
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        errorN("ERROR::SHADER::SET_MAT4::%d %s\n", error, uniformName.c_str());
+    }
 }
 
 void Shader::setVec3(const std::string &uniformName, const glm::vec3 &value) const {

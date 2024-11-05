@@ -9,11 +9,10 @@ namespace pixl {
 class Renderer {
 public:
     Renderer();
-    ~Renderer() = default;
 
-    void render(Scene &scene);
+    void render(Scene *scene);
 private:
-    BlinnPhong _blinnPhong;
+    BlinnPhong *_blinnPhong;
 };
 
 } // namespace pixl

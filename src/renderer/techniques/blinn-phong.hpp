@@ -12,7 +12,7 @@ public:
     void use();
     void init(std::string vShader, std::string fShader);
 private:
-    Shader _shaders;
+    Shader *_shaders;
 };
 
 } // namespace pixl

@@ -4,13 +4,14 @@
 namespace pixl {
 
 Renderer::Renderer() {
-    _blinnPhong = BlinnPhong();
-    _blinnPhong.init("src/shaders/blinn-phong/vert.glsl", "src/shaders/blinn-phong/frag.glsl");
+    _blinnPhong = new BlinnPhong();
+    _blinnPhong->init("src/shaders/blinn-phong/vert.glsl", "src/shaders/blinn-phong/frag.glsl");
 }
 
-void Renderer::render(Scene &scene) {
-    _blinnPhong.use();
-    for (Model *model: scene.getModels()) {
+void Renderer::render(Scene *scene) {
+    _blinnPhong->use();
+
+    for (Model *model: scene->getModels()) {
         model->drawModel();
     }
 }
