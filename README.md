@@ -1,2 +1,2 @@
 # pixl
-Making the best mf game engine on this planet
+A 3d renderer in OpenGL.
