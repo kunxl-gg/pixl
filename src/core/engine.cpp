@@ -48,7 +48,8 @@ void Engine::shutdown() {
     delete _window;
     delete _renderer;
     delete _scene;
-    _window = nullptr;
+
+    _window = nullptr, _renderer = nullptr, _scene = nullptr;
 }
 
 void Engine::run() {
@@ -67,8 +68,6 @@ void Engine::run() {
 
         _window->endFrame();
     }
-
-    shutdown();
 }
 
 void Engine::setupScene() {
