@@ -10,12 +10,15 @@ namespace pixl {
 
 class Scene {
 public:
+    Scene();
+    ~Scene();
+
     LightSettings *getLights() { return _lights; }
 
     std::vector<Model *> &getModels() { return _models; }
     void addModel(Model *model) { _models.push_back(model); }
 
-    void setupLights();
+    void setSun(glm::vec3 color, glm::vec3 position);
     void setupCamera(glm::vec3 cameraPos, glm::vec3 cameraFront, glm::vec3 cameraUp);
 private:
     Camera *_camera;

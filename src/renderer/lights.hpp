@@ -19,6 +19,7 @@ struct DirectionalLight {
 
 class LightSettings {
 public:
+    DirectionalLight getSun() { return _sun; }
     void setSun(glm::vec3 color, glm::vec3 direction);
     void addPointLight(glm::vec3 color, glm::vec3 position);
 private:

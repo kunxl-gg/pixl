@@ -20,6 +20,9 @@ void Renderer::render(Scene *scene) {
     _blinnPhong->use();
     _blinnPhong->getShader()->setMat4("view", _camera->getViewMatrix());
 
+    _blinnPhong->getShader()->setVec3("light.color", scene->getLights()->getSun()._color);
+    _blinnPhong->getShader()->setVec3("light.direction", scene->getLights()->getSun()._direction);
+
     for (Model *model: scene->getModels()) {
         model->drawModel();
     }

@@ -1,4 +1,5 @@
 #include "pixl/src/core/engine.hpp"
+#include "pixl/include/glm/ext/vector_float3.hpp"
 #include "pixl/src/core/input.hpp"
 #include "pixl/src/core/model.hpp"
 
@@ -75,6 +76,8 @@ void Engine::setupScene() {
 
     Model *bunny = new Model(std::filesystem::absolute("assets/teapot.obj"));
     _scene->addModel(bunny);
+
+    _scene->getLights()->setSun(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, -1.0f, 0.5f));
 }
 
 } // namespace pixl
