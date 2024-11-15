@@ -3,10 +3,29 @@
 
 namespace pixl {
 
+Window::Window(const char *title) {
+    if (!glfwInit()) {
+        error("Failed to initialise GLFW");
+        return;
+    }
+
+    const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+    _title = title;
+    _width = mode->width;
+    _height = mode->height;
+    _window = nullptr;
+}
+
 Window::Window(int width, int height, const char *title) {
+    if (!glfwInit()) {
+        error("Failed to initialise GLFW");
+        return;
+    }
+
+    _title = title;
     _width = width;
     _height = height;
-    _title = title;
     _window = nullptr;
 }
 
@@ -15,11 +34,6 @@ Window::~Window() {
 }
 
 void Window::init() {
-    if (!glfwInit()) {
-        error("Failed to initialise GLFW");
-        return;
-    }
-
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

@@ -14,10 +14,10 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
-    debug("Initialising Pixl");
+    info("Initialising Pixl");
 
     // Initialise the window
-    _window = new Window(800, 600, "Pixl");
+    _window = new Window("Pixl");
     _window->init();
 
     // Initialise GLAD
@@ -26,7 +26,7 @@ void Engine::init() {
         return;
     }
 
-    _window->setViewport(0, 0, 800, 600);
+    _window->setViewport();
 
     // Print OpenGL stats
     info("OpenGL Version: %s", glGetString(GL_VERSION));

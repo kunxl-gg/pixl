@@ -7,6 +7,7 @@ namespace pixl {
 
 class Window {
 public:
+    Window(const char *title);
     Window(int width, int height, const char *title);
     ~Window();
 
@@ -15,8 +16,8 @@ public:
 
     static void handleResize(GLFWwindow *window, int width, int height);
     void resize(int width, int height);
-    void setViewport(int x, int y, int width, int height) {
-        glViewport(x, y, width, height);
+    void setViewport() {
+        glViewport(0, 0, _width, _height);
     }
 
     void beginFrame();
