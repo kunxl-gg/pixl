@@ -11,6 +11,8 @@ public:
 
     void use();
     void init(std::string vShader, std::string fShader);
+
+    Shader *getShader() { return _shaders; }
 private:
     Shader *_shaders;
 };
