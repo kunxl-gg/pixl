@@ -107,8 +107,7 @@ void Shader::setInt(const std::string &uniformName, int value) const {
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-
-        errorN("ERROR::SHADER::SET_INT::%d %s\n", error, uniformName.c_str());
+        errorN("Shader::setInt() %d %s\n", error, uniformName.c_str());
     }
 }
 
@@ -118,26 +117,17 @@ void Shader::setBool(const std::string &uniformName, bool value) const {
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        errorN("ERROR::SHADER::SET_BOOL::%d %s\n", error, uniformName.c_str());
+        errorN("Shader::setBool() %d %s\n", error, uniformName.c_str());
     }
 }
 
 void Shader::setMat4(const std::string &uniformName, const glm::mat4 &value) const {
-    debug("Setting Mat4 for program %d", _programID);
-    glUseProgram(_programID);
-
-    GLint currentProgram;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-    if (currentProgram != _programID) {
-        errorN("Failed to activate shader program: expected %d, got %d\n", _programID, currentProgram);
-    }
-
     GLint id = glGetUniformLocation(_programID, uniformName.c_str());
     glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(value));
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        errorN("ERROR::SHADER::SET_MAT4::%d %s\n", error, uniformName.c_str());
+        errorN("Shader::setMat4(): %d %s\n", error, uniformName.c_str());
     }
 }
 
@@ -147,7 +137,7 @@ void Shader::setVec3(const std::string &uniformName, const glm::vec3 &value) con
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        std::cout << "ERROR::SHADER::SET_VEC3::" << error << " " << uniformName.c_str() << std::endl;
+        errorN("Shader::setVec3(): %d %s\n", error, uniformName.c_str());
     }
 }
 
